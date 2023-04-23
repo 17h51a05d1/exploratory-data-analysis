@@ -1,0 +1,10 @@
+"0","```r
+ggplot(olympics %>% filter(Medal == \"Gold\"), aes(x = reorder(Sport, -Age, median), y = Age)) +
+  geom_boxplot(fill = \"goldenrod\", color = \"black\", alpha = 0.8) +
+  xlab(\"Sport\") +
+  ylab(\"Age\") +
+  ggtitle(\"Distribution of Gold Medals by Sport (Descending Median Age)\") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```"

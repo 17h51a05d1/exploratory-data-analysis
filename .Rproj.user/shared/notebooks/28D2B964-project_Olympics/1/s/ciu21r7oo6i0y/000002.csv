@@ -1,0 +1,14 @@
+"0","```r
+sport_events <- data %>%
+  group_by(Sport) %>%
+  summarize(total_events = n_distinct(Event)) %>%
+  arrange(desc(total_events))
+
+# Create a bar plot of total number of events for each sport
+ggplot(sport_events, aes(x = fct_reorder(Sport,total_events), y = total_events)) +
+  geom_bar(stat = \"identity\", fill = \"orange\") +
+  theme_bw() +
+  labs(x = \"Sport\", y = \"Total Number of Events\",
+       title = \"Total Number of Events for each Sport\") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+```"

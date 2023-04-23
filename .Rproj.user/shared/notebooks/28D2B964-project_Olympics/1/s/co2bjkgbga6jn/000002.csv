@@ -1,0 +1,4 @@
+"0","```r
+data <- inner_join(unique_data, df2, by = \"NOC\")
+data
+```"

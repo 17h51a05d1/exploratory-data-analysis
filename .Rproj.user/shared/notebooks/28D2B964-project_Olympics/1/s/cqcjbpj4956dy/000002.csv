@@ -1,0 +1,22 @@
+"0","```r
+#- Group data by year and sex, and count the number of participants(use group by & summarise)
+gender_participants <- data %>%
+  group_by(Year, Sex) %>%
+  summarise(total_participants = n()) %>%
+  ungroup()
+```"
+"1","`summarise()` has grouped output by 'Year'. You can override using the `.groups` argument.
+"
+"0","```r
+#Convert data to wide format(use pivot wider,then dygraph/plotly)
+gender_participants_wide <- gender_participants %>%
+  pivot_wider(names_from = Sex, values_from = total_participants)
+
+#dygraph
+dygraph(gender_participants_wide, xlab = \"Year\", ylab = \"Total Participants\",
+        main = \"Gender-wise Participation over Years\") %>%
+  dyOptions(fillGraph = TRUE) %>%
+  dyLegend(show = \"always\") %>%
+  dySeries(\"F\", label = \"Female\") %>%
+  dySeries(\"M\", label = \"Male\")
+```"

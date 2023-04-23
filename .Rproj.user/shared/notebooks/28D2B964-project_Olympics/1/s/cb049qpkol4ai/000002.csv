@@ -1,0 +1,8 @@
+"0","```r
+ggplot(data = count_by_region_above50, aes(x = count_per_region_above50 , y = fct_reorder(region, count_per_region_above50)))+
+  geom_bar(stat = 'identity',fill = \"green\")+
+  xlab(\"Number of participants\") +
+  ylab(\"Countries\") +
+  ggtitle(\"Distribution of participants above the age 50\") +
+  theme_minimal() 
+```"

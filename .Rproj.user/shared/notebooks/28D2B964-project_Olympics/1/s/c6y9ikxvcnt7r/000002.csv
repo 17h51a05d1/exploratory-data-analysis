@@ -1,0 +1,12 @@
+"0","```r
+athletes_by_season <- data %>%
+  group_by(Season) %>%
+  summarize(count = n())
+
+ggplot(athletes_by_season, aes(x = Season, y = count, fill = Season)) +
+  geom_bar(stat = \"identity\") +
+  labs(title = \"Number of Athletes by Season\",
+       x = \"Season\",
+       y = \"Number of Athletes\",
+       fill = \"Season\")
+```"

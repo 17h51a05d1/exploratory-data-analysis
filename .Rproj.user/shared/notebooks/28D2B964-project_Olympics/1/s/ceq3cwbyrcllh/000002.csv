@@ -1,0 +1,6 @@
+"0","```r
+set.seed(41)  #to avoid changing random numbers every time this code snippet is run
+unique_data$TFQI <- runif(n = 269731, min = 0,max = 1)
+unique_data$Training_intensity_level <- runif(n = 269731, min = 1, max = 10)
+unique_data
+```"

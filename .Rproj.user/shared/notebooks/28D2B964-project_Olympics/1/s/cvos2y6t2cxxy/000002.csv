@@ -1,0 +1,9 @@
+"0","```r
+combined <- combined %>% 
+  mutate(
+    ratio = (count_per_region_above50/count_per_region_below50)* 100
+  ) %>% 
+  arrange(desc(ratio)) %>% 
+  filter(ratio > 2)
+combined
+```"

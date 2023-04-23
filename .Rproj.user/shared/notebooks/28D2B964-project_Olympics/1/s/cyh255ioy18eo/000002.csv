@@ -1,0 +1,8 @@
+"0","```r
+ggplot(data %>% filter(Medal == \"Gold\"), aes(x = Age)) +
+  geom_histogram(binwidth = 2, fill = \"goldenrod\", color = \"black\") +
+  xlab(\"Age\") +
+  ylab(\"Frequency\") +
+  ggtitle(\"Distribution of Gold Medals by Age\") +
+  theme_minimal()
+```"

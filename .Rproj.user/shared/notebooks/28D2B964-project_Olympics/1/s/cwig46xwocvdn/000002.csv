@@ -1,0 +1,44 @@
+"0","```r
+summer_sports <- data%>%
+  filter(Season == \"Summer\") %>%
+  distinct(Sport) %>%
+  pull(Sport)
+
+winter_sports <- data %>%
+  filter(Season == \"Winter\") %>%
+  distinct(Sport) %>%
+  pull(Sport)
+
+unique_summer_sports <- setdiff(summer_sports, winter_sports)
+unique_winter_sports <- setdiff(winter_sports, summer_sports)
+
+cat(\"Sports played only in Summer:\n\")
+```"
+"1","Sports played only in Summer:
+"
+"0","```r
+print(unique_summer_sports)
+```"
+"1"," [1] \"Basketball\"            \"Judo\"                  \"Football\"              \"Tug-Of-War\"            \"Athletics\"             \"Swimming\"             
+ [7] \"Badminton\"             \"Sailing\"               \"Gymnastics\"            \"Art Competitions\"      \"Handball\"              \"Weightlifting\"        
+[13] \"Wrestling\"             \"Water Polo\"            \"Hockey\"                \"Rowing\"                \"Fencing\"               \"Equestrianism\"        
+[19] \"Shooting\"              \"Boxing\"                \"Taekwondo\"             \"Cycling\"               \"Diving\"                \"Canoeing\"             
+[25] \"Tennis\"                \"Modern Pentathlon\"     \"Golf\"                  \"Softball\"              \"Archery\"               \"Volleyball\"           
+[31] \"Synchronized Swimming\" \"Table Tennis\"          \"Baseball\"              \"Rhythmic Gymnastics\"   \"Rugby Sevens\"          \"Trampolining\"         
+[37] \"Beach Volleyball\"      \"Triathlon\"             \"Rugby\"                 \"Lacrosse\"              \"Polo\"                  \"Cricket\"              
+[43] \"Racquets\"              \"Motorboating\"          \"Croquet\"               \"Jeu De Paume\"          \"Roque\"                 \"Basque Pelota\"        
+[49] \"Aeronautics\"          
+"
+"0","```r
+cat(\"\nSports played only in Winter:\n\")
+```"
+"1","
+Sports played only in Winter:
+"
+"0","```r
+print(unique_winter_sports)
+```"
+"1"," [1] \"Speed Skating\"             \"Cross Country Skiing\"      \"Biathlon\"                  \"Alpine Skiing\"             \"Luge\"                     
+ [6] \"Bobsleigh\"                 \"Nordic Combined\"           \"Freestyle Skiing\"          \"Ski Jumping\"               \"Curling\"                  
+[11] \"Snowboarding\"              \"Short Track Speed Skating\" \"Skeleton\"                  \"Military Ski Patrol\"      
+"

@@ -1,0 +1,21 @@
+"0","```r
+# Create a new column to indicate whether the year is affected by a world war
+olympics <- data %>%
+  mutate(WorldWar = ifelse(Year >= 1914 & Year <= 1918 | Year >= 1939 & Year <= 1945, \"Yes\", \"No\"))
+
+olympics_by_year <- olympics %>%
+  group_by(Year, WorldWar) %>%
+  summarize(TotalAthletes = n_distinct(ID))
+```"
+"1","`summarise()` has grouped output by 'Year'. You can override using the `.groups` argument.
+"
+"0","```r
+ggplot(olympics_by_year, aes(x = Year, y = TotalAthletes, fill = WorldWar)) +
+  geom_col(position = \"stack\") +
+  scale_fill_manual(values = c(\"No\" = \"#1f77b4\", \"Yes\" = \"#ff7f0e\")) +
+  labs(title = \"Number of Participants over Years\",
+       subtitle = \"World War Years Highlighted\",
+       x = \"Year\",
+       y = \"Number of Participants\",
+       fill = \"Affected by World War\")
+```"

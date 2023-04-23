@@ -1,0 +1,11 @@
+"0","```r
+germany_data <- data %>% 
+  filter(region == \"Germany\") %>% 
+  group_by(Year) %>% 
+  summarise(number_of_participants = n())
+ggplot(germany_data, aes(x = Year, y = number_of_participants))+
+  geom_bar(stat = \"identity\", fill = \"red\")+
+  xlab(\"Year of participation\") +
+  ylab(\"number of participants\") +
+  ggtitle(\"Germany's Participation Over Years\") 
+```"

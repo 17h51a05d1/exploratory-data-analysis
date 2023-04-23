@@ -1,0 +1,4 @@
+"0","```r
+combined <- combined %>% pivot_longer(cols = c(count_per_region_above50,count_per_region_below50), names_to = \"type\", values_to = \"count_of_people\")
+combined
+```"

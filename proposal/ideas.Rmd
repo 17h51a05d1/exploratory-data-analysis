@@ -1,0 +1,18 @@
+
+
+# Analysis of Olympic History
+
+### Proposal
+
+The modern **Olympic Games** or **Olympics** are the leading international sporting events featuring summer and winter sports competitions in which thousands of athletes from around the world participate in a variety of competitions. The Olympic Games are considered the world's foremost sports competition with more than 200 teams, representing sovereign states and territories, participating. The Olympic Games are normally held every four years, and since 1994, have alternated between the Summer and Winter Olympics every two years during the four-year period. Their creation was inspired by the ancient Olympic Games, held in Olympia, Greece from the 8th century BC to the 4th century AD. Baron Pierre De Coubertin founded the International Olympic Committee (IOC) in 1894, leading to the first modern Games in Athens in 1896.
+
+Hosting (or even bidding for) the Olympics appears to increase the host country's exports, as the host or candidate country sends a signal about trade openness when bidding to host the Games. On the other hand, it might also have a negative impact on the host country which might initially spend huge amount but end up in debts due to lack of social/economic support.
+
+The Olympic games have been held for over a century and provide a vast amount of data about all the athletes, various trends in sports, as well as the socio-political factors that might affect the Olympics in either negative or positive way. This proposal aims to analyze and visualize the “History of Olympics and athletes”. The dataset includes information about 271,117 athletes who have participated in the Olympics from 1896 to 2016.
+
+The dataset has been taken from R4DS Tidy Tuesday’s challenges for the year 2021 in github.com (https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-07-27) inspired by the articles from Financial Times and FiveThirtyEight which tried to analyze the countries which over – performed or under – performed their set expectations. The dataset gives us a chance to work around the following variables : unique id for each athlete, name of the athlete, age of the athlete, sex(M or F), height(in centimeters), weight(in kilograms) of the athlete, team name, National Olympic Committee 3 – letter code, year of the game, season of the game(Summer or Winter), host city, the kind of sport, event name and the medal won(if any).
+
+The primary motivation behind analyzing this data is to understand how the Olympics have evolved over time by including the changes in sports, events, athletes, and countries that have been participating. We will also try to analyze the performance of individual athletes in terms of sex, age, and the team to which they belong and thereby try to identify the factors that contribute to the success.Also try to find few social events that had an effect on Olympics.
+
+The proposed analysis will be using statistical techniques from R to extract, clean, analyze and visualize the data. It will be focusing on identifying trends and patterns in the data, as well as some useful and important relationships between different variables. The findings of this analysis will provide useful information about participating athletes, coaches who are training those athletes and the national sports department supporting them for initiating the best possible actions to achieve higher rate of success and henceforth contribute to much wider understanding of the role of sports in our society.
+

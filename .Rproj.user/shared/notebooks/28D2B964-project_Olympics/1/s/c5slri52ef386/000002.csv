@@ -1,0 +1,12 @@
+"0","```r
+df2 <- read_csv(\"C:/Users/bruva/OneDrive/Documents/noc_regions.csv\")
+```"
+"1","Rows: 230 Columns: 3── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: \",\"
+chr (3): NOC, region, notes
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","```r
+df2
+```"

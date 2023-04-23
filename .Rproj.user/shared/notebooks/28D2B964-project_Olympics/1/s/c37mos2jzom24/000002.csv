@@ -1,0 +1,13 @@
+"0","```r
+data %>%
+  filter(!is.na(Name)) %>%
+  mutate(first_name = str_extract(Name, \"^[A-Za-z'-]+\")) %>%
+  count(first_name, sort = TRUE) %>%
+  filter(n >= 1000) %>%
+  ggplot(aes(x = reorder(first_name, n), y = n)) +
+  geom_col(fill = \"purple\") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  xlab(\"First Name\") +
+  ylab(\"Frequency\") +
+  ggtitle(\"Most Common First Names in the Olympics (>= 1000 occurrences)\") 
+```"

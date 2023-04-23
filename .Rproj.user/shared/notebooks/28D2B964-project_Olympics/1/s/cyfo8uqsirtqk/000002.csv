@@ -1,0 +1,5 @@
+"0","```r
+below_50 <- data %>% 
+ filter(Age <= 50)
+below_50
+```"

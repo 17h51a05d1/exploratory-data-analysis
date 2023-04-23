@@ -1,0 +1,379 @@
+---
+title: "report"
+author: "Brunda Uppalapati"
+date: "2023-04-22"
+output: html_document
+---
+
+
+
+```{r}
+library(tidyr)
+library(tidyverse)
+library(readxl)
+library(reshape2)
+library(lubridate)
+library(dygraphs)
+```
+
+```{r}
+getwd()
+```
+
+```{r}
+df1 <- read_csv("athlete_events.csv")
+df1
+```
+```{r}
+df2 <- read_csv("noc_regions.csv")
+df2
+```
+
+
+
+```{r}
+#df2 <- unique( df[ , c('Name','Sex','Age','Height','Weight','Team','NOC','Games','Year','Season','City','Sport','Event','Medal') ] )
+unique_data <- df1 %>% distinct()
+unique_data
+```
+
+```{r}
+set.seed(41)  #to avoid changing random numbers every time this code snippet is run
+unique_data$TFQI <- runif(n = 269731, min = 0,max = 1)
+unique_data$Training_intensity_level <- runif(n = 269731, min = 1, max = 10)
+unique_data
+```
+-The TFQI is a numeric score that reflects the availability and quality of training facilities to that particular sportsperson for that event, with higher scores indicating better access to modern and well-equipped facilities(the quality and maintenance of equipment, the availability of qualified trainers and coaches, and the accessibility of facilities to athletes).
+-The Training Intensity Level column would capture the level of intensity at which an athlete is trained for their sport leading up to the Olympics.To collect data on TIL, athletes could be asked to self-report their training intensity level on a scale from 1 to 10, with 1 representing low intensity and 10 representing high intensity. 
+
+
+```{r}
+data <- inner_join(unique_data, df2, by = "NOC")
+data
+```
+
+
+# Distribution of Gold Medals by Age
+
+```{r}
+ggplot(data %>% filter(Medal == "Gold"), aes(x = Age)) +
+  geom_histogram(binwidth = 2, fill = "goldenrod", color = "black") +
+  xlab("Age") +
+  ylab("Frequency") +
+  ggtitle("Distribution of Gold Medals by Age") +
+  theme_minimal()
+```
+Highest frequency of gold medals comes around the age 24 and 25. Also there are medals won around the age 50.We would explore about that later.
+
+# Which country had the most active seniors participation after the age of 50
+
+```{r}
+above_50 <- data %>% 
+ filter(Age >= 50)
+above_50
+```
+
+
+```{r}
+count_by_region_above50 <- above_50 %>% 
+  group_by(region) %>% 
+  summarise(
+    count_per_region_above50 = n()
+    ) 
+count_by_region_above50
+```
+
+```{r}
+ggplot(data = count_by_region_above50, aes(x = count_per_region_above50 , y = fct_reorder(region, count_per_region_above50)))+
+  geom_bar(stat = 'identity',fill = "green")+
+  xlab("Number of participants") +
+  ylab("Countries") +
+  ggtitle("Distribution of participants above the age 50") +
+  theme_minimal() 
+```
+
+# Show the ratio of seniors versus below 50.
+```{r}
+below_50 <- data %>% 
+ filter(Age <= 50)
+below_50
+```
+
+```{r}
+count_by_region_below50 <- below_50 %>% 
+  group_by(region) %>% 
+  summarise(
+    count_per_region_below50 = n()
+    ) 
+count_by_region_below50
+```
+
+
+```{r}
+combined <- left_join(count_by_region_above50, count_by_region_below50, by = "region")
+combined
+```
+
+
+
+```{r}
+combined <- combined %>% 
+  mutate(
+    ratio = (count_per_region_above50/count_per_region_below50)* 100
+  ) %>% 
+  arrange(desc(ratio)) %>% 
+  filter(ratio > 2)
+combined
+```
+
+```{r}
+combined <- combined %>% pivot_longer(cols = c(count_per_region_above50,count_per_region_below50), names_to = "type", values_to = "count_of_people")
+combined
+```
+
+```{r}
+ggplot(data = combined)+
+  geom_bar(aes(x = count_of_people, y = fct_reorder(region,count_of_people), fill = type), position = "stack", stat = "identity") +
+  scale_x_log10()+
+  xlab("Number of participants") +
+  ylab("Country") +
+  ggtitle("Distribution Ratio of participants above 50 to below 50") +
+  theme_minimal() 
+```
+Though the participation number of seniors was high for countries USA,UK, Germany, France. Their ratio of participation was much lower than the regions displayed above.
+
+# identify what events these seniors are into
+```{r}
+above_50
+```
+
+
+```{r}
+count_by_sport <- above_50 %>% 
+  group_by(Sport) %>% 
+  summarise(
+    count_per_sport = n()
+  ) 
+count_by_sport
+```
+
+```{r}
+ggplot(data = count_by_sport)+
+  geom_bar(aes(x = count_per_sport, y = fct_reorder(Sport,count_per_sport)), stat = "identity", fill = "violet")+
+  xlab("total count per Sport") +
+  ylab("Sport") +
+  ggtitle("Sports taken up by participants above age 50") +
+  theme_minimal() 
+```
+We see that they are into those sports that require the use of tactics and brain more than physical strength.
+
+# Distribution of gold medals by sport
+```{r}
+ggplot(data %>% filter(Medal == "Gold"), aes(x = reorder(Sport, -Age, median), y = Age)) +
+  geom_boxplot(fill = "goldenrod", color = "black", alpha = 0.8) +
+  xlab("Sport") +
+  ylab("Age") +
+  ggtitle("Distribution of Gold Medals by Sport (Descending Median Age)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```
+1.some sports have a relatively narrow age range (e.g., gymnastics) and others having a wider age range (e.g., shooting).
+
+2.Some sports tend to have older gold medalists on average, such as equestrian, shooting, and sailing, while other sports tend to have younger gold medalists on average, such as gymnastics, diving, and swimming.
+
+3.The distribution of ages within each sport can also reveal information about the nature of the sport itself. For example, sports that require a high degree of physical strength and endurance, such as weightlifting and marathon running, tend to have younger gold medalists on average, while sports that require a high degree of skill and technique, such as figure skating and diving, tend to have older gold medalists on average.
+
+
+
+# number of athletes who participated in each season (Summer vs. Winter)
+```{r}
+athletes_by_season <- data %>%
+  group_by(Season) %>%
+  summarize(count = n())
+
+ggplot(athletes_by_season, aes(x = Season, y = count, fill = Season)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Number of Athletes by Season",
+       x = "Season",
+       y = "Number of Athletes",
+       fill = "Season")
+```
+we can see that there are significantly more athletes who participate in the Summer Olympics compared to the Winter Olympics. This could be due to a number of reasons, such as the fact that more sports are included in the Summer Olympics or that certain sports are more popular in warmer weather. It's also worth noting that there are some seasons where the number of athletes participating is higher than others. For example, there was a significant increase in the number of athletes participating in both the Summer and Winter Olympics from the 1980s onwards, possibly due to increased global participation in sports. 
+
+# Try to find sports that were played only in Summer or only in Winter
+```{r}
+summer_sports <- data%>%
+  filter(Season == "Summer") %>%
+  distinct(Sport) %>%
+  pull(Sport)
+
+winter_sports <- data %>%
+  filter(Season == "Winter") %>%
+  distinct(Sport) %>%
+  pull(Sport)
+
+unique_summer_sports <- setdiff(summer_sports, winter_sports)
+unique_winter_sports <- setdiff(winter_sports, summer_sports)
+
+cat("Sports played only in Summer:\n")
+print(unique_summer_sports)
+
+cat("\nSports played only in Winter:\n")
+print(unique_winter_sports)
+```
+***(check if there is a better way to represent above data)
+
+# number of events for each sport
+```{r}
+sport_events <- data %>%
+  group_by(Sport) %>%
+  summarize(total_events = n_distinct(Event)) %>%
+  arrange(desc(total_events))
+
+# Create a bar plot of total number of events for each sport
+ggplot(sport_events, aes(x = fct_reorder(Sport,total_events), y = total_events)) +
+  geom_bar(stat = "identity", fill = "orange") +
+  theme_bw() +
+  labs(x = "Sport", y = "Total Number of Events",
+       title = "Total Number of Events for each Sport") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+```
+
+We can see that Athletics has the highest number of events, followed by Swimming and Cycling. This information can be useful in understanding the popularity and diversity of different sports in the Olympic Games. It can also help in understanding the allocation of resources and planning for these events by the organizing committee. We can also observe the long tail distribution of events across other sports, with a significant number of sports having only a few events.
+
+
+# Distribution of height and weight of athletes
+```{r}
+athlete_hw <- data %>%
+  filter(!is.na(Height) & !is.na(Weight))
+
+# Create the scatter plot
+ggplot(athlete_hw, aes(x = Height, y = Weight, color = Sex)) +
+  geom_point(alpha = 0.5) +
+  scale_color_manual(values = c("pink", "blue")) +
+  theme_minimal() +
+  labs(title = "Height and Weight of Athletes by Gender",
+       x = "Height (cm)",
+       y = "Weight (kg)",
+       color = "Gender",
+       )
+```
+1.There is a positive relationship between height and weight, with taller athletes generally weighing more than shorter athletes.
+2.Male athletes tend to be taller and heavier on average than female athletes, as shown by the clustering of blue points (males) in the upper right corner of the plot, and the clustering of pink points (females) in the lower left corner of the plot.
+3.There is a lot of overlap between male and female athletes in terms of height and weight, as shown by the mixing of blue and pink points throughout the plot. This suggests that height and weight are not sufficient to completely differentiate between male and female athletes.
+4.There are a few outliers in the plot, representing athletes who are exceptionally tall and/or heavy. These outliers are mostly male athletes, which suggests that male athletes are more likely to be at the extreme ends of the height and weight distribution than female athletes or the outliers could depict weightlifters.
+
+# Socio-economic events and their effects:
+
+# Time series analysis of male and and female participation over years
+```{r}
+#- Group data by year and sex, and count the number of participants(use group by & summarise)
+gender_participants <- data %>%
+  group_by(Year, Sex) %>%
+  summarise(total_participants = n()) %>%
+  ungroup()
+
+#Convert data to wide format(use pivot wider,then dygraph/plotly)
+gender_participants_wide <- gender_participants %>%
+  pivot_wider(names_from = Sex, values_from = total_participants)
+
+#dygraph
+dygraph(gender_participants_wide, xlab = "Year", ylab = "Total Participants",
+        main = "Gender-wise Participation over Years") %>%
+  dyOptions(fillGraph = TRUE) %>%
+  dyLegend(show = "always") %>%
+  dySeries("F", label = "Female") %>%
+  dySeries("M", label = "Male")
+```
+
+I pivoted the data so that each year was a row, and the count of male and female participants were columns. This allows us to easily see the trend of male and female participation over time in the time series plot.
+we can observe that the overall trend in the number of male participants is higher than that of female participants, indicating a higher representation of men in the Olympics. However, we can also see that the gap between the number of male and female participants has been decreasing over the years, indicating progress towards gender equality in sports. Additionally, we can see some peaks and dips in the number of participants, which may be related to various factors such as geopolitical events, economic conditions, and changes in the sports industry.
+
+#Show the effect of world war on olympics
+```{r}
+# Create a new column to indicate whether the year is affected by a world war
+olympics <- data %>%
+  mutate(WorldWar = ifelse(Year >= 1914 & Year <= 1918 | Year >= 1939 & Year <= 1945, "Yes", "No"))
+
+olympics_by_year <- olympics %>%
+  group_by(Year, WorldWar) %>%
+  summarize(TotalAthletes = n_distinct(ID))
+
+
+ggplot(olympics_by_year, aes(x = Year, y = TotalAthletes, fill = WorldWar)) +
+  geom_col(position = "stack") +
+  scale_fill_manual(values = c("No" = "#1f77b4", "Yes" = "#ff7f0e")) +
+  labs(title = "Number of Participants over Years",
+       subtitle = "World War Years Highlighted",
+       x = "Year",
+       y = "Number of Participants",
+       fill = "Affected by World War")
+ 
+```
+There are breaks at two places. The Olympics was cancelled around the year 1916 and 1944 due to World WarI and World WarII.
+You can find the article containing these details below:
+"https://www.halsbury.com/school-travel-blog/how-did-war-affect-the-olympics"
+
+
+```{r}
+germany_data <- data %>% 
+  filter(region == "Germany") %>% 
+  group_by(Year) %>% 
+  summarise(number_of_participants = n())
+ggplot(germany_data, aes(x = Year, y = number_of_participants))+
+  geom_bar(stat = "identity", fill = "red")+
+  xlab("Year of participation") +
+  ylab("number of participants") +
+  ggtitle("Germany's Participation Over Years") 
+```
+
+On further analysis I found that Germany was not invited for few Olympics held around 1925 and 1950 which is why we find much wider gaps when we come up with participation visualization for Germany. We can find the supporting article here:
+"https://www.history.com/news/olympics-postponed-cancelled"
+
+```{r}
+data %>% 
+  filter(Year == "1936")
+```
+In 1936, it was allowed to host Olympics. read the article to know more: "https://encyclopedia.ushmm.org/content/en/article/the-nazi-olympics-berlin-1936"
+
+
+
+# Number of times each city hosted Olympics
+```{r}
+# Create a new data frame with City and Year columns
+city_year <- data %>%
+  distinct(City, Year) %>%
+  group_by(City) %>%
+  summarize(Num_Hosted = n())
+
+# Create the plot
+ggplot(city_year, aes(x = reorder(City,Num_Hosted), y = Num_Hosted)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+ xlab("City") +
+  ylab("Number of times hosted Olympics") +
+  ggtitle("Number of times each city hosted Olympics")
+```
+London after hosting Olympics for 3 times, the large number of events helped to attract a record number of athletes, with over 10,500 athletes from 204 countries participating. The event was also a huge success in terms of ticket sales, with over 8 million tickets sold across all events, generating over £500 million in revenue.The infrastructure and facilities built for the Olympics, such as the Olympic Park and the Olympic Village, have also been re purposed and used for other events, such as concerts, sports events, and community activities, providing long-term benefits for the city and its residents.The increased exposure and attention had long-term benefits for tourism, trade, and investment and also Construction industry.Find the supporting results here: "https://olympics.com/ioc/news/london-2012-to-provide-long-lasting-economic-benefits"
+
+# Frequency of first names
+```{r}
+data %>%
+  filter(!is.na(Name)) %>%
+  mutate(first_name = str_extract(Name, "^[A-Za-z'-]+")) %>%
+  count(first_name, sort = TRUE) %>%
+  filter(n >= 1000) %>%
+  ggplot(aes(x = reorder(first_name, n), y = n)) +
+  geom_col(fill = "purple") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  xlab("First Name") +
+  ylab("Frequency") +
+  ggtitle("Most Common First Names in the Olympics (>= 1000 occurrences)") 
+ 
+```
+This can be useful information for marketers or advertisers who may want to target individuals with these common names, or for people interested in naming trends among elite athletes.
+
+
+
+

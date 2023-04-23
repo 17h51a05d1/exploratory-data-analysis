@@ -1,0 +1,8 @@
+"0","```r
+count_by_sport <- above_50 %>% 
+  group_by(Sport) %>% 
+  summarise(
+    count_per_sport = n()
+  ) 
+count_by_sport
+```"

@@ -1,0 +1,15 @@
+"0","```r
+athlete_hw <- data %>%
+  filter(!is.na(Height) & !is.na(Weight))
+
+# Create the scatter plot
+ggplot(athlete_hw, aes(x = Height, y = Weight, color = Sex)) +
+  geom_point(alpha = 0.5) +
+  scale_color_manual(values = c(\"pink\", \"blue\")) +
+  theme_minimal() +
+  labs(title = \"Height and Weight of Athletes by Gender\",
+       x = \"Height (cm)\",
+       y = \"Weight (kg)\",
+       color = \"Gender\",
+       )
+```"

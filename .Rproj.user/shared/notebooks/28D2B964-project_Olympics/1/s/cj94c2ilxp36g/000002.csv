@@ -1,0 +1,5 @@
+"0","```r
+#df2 <- unique( df[ , c('Name','Sex','Age','Height','Weight','Team','NOC','Games','Year','Season','City','Sport','Event','Medal') ] )
+unique_data <- df1 %>% distinct()
+unique_data
+```"

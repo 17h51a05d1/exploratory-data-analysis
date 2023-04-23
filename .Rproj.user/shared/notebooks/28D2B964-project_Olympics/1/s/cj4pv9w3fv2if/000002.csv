@@ -1,0 +1,8 @@
+"0","```r
+ggplot(data = count_by_sport)+
+  geom_bar(aes(x = count_per_sport, y = fct_reorder(Sport,count_per_sport)), stat = \"identity\", fill = \"violet\")+
+  xlab(\"total count per Sport\") +
+  ylab(\"Sport\") +
+  ggtitle(\"Sports taken up by participants above age 50\") +
+  theme_minimal() 
+```"

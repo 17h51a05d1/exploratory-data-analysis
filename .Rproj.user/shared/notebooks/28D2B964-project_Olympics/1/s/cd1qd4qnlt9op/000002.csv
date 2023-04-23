@@ -1,0 +1,9 @@
+"0","```r
+ggplot(data = combined)+
+  geom_bar(aes(x = count_of_people, y = fct_reorder(region,count_of_people), fill = type), position = \"stack\", stat = \"identity\") +
+  scale_x_log10()+
+  xlab(\"Number of participants\") +
+  ylab(\"Country\") +
+  ggtitle(\"Distribution Ratio of participants above 50 to below 50\") +
+  theme_minimal() 
+```"

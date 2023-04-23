@@ -1,0 +1,15 @@
+"0","```r
+# Create a new data frame with City and Year columns
+city_year <- data %>%
+  distinct(City, Year) %>%
+  group_by(City) %>%
+  summarize(Num_Hosted = n())
+
+# Create the plot
+ggplot(city_year, aes(x = reorder(City,Num_Hosted), y = Num_Hosted)) +
+  geom_bar(stat = \"identity\", fill = \"skyblue\") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+ xlab(\"City\") +
+  ylab(\"Number of times hosted Olympics\") +
+  ggtitle(\"Number of times each city hosted Olympics\")
+```"

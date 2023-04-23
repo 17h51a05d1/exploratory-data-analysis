@@ -1,0 +1,8 @@
+"0","```r
+count_by_region_above50 <- above_50 %>% 
+  group_by(region) %>% 
+  summarise(
+    count_per_region_above50 = n()
+    ) 
+count_by_region_above50
+```"
